@@ -1,0 +1,104 @@
+package mvc.modelo;
+
+import java.awt.Color;
+
+import lectorRecursos.ImagenRes;
+
+public class FSharpen extends Filtros {
+    
+    private int fila = 0;
+    private int[][] sharpen = {{-1,-1,-1},
+                               {-1, 9,-1},
+                               {-1,-1,-1}};
+    
+    public FSharpen(String nombre) {
+        super(nombre);
+        extension = "_sharpen";
+    }
+    
+    @Override
+    public synchronized void concurrente() {
+        fila++;
+    }
+    
+    /**
+     * Metodo que aplica sharpen de forma secuencial
+     */
+    public void secuencial() {
+        Color pixel;
+        for(int i = 0; i < largo; i++) {
+            for(int j = 0; j < ancho; j++) {
+                int rojo = 0;
+                int verd = 0;
+                int azul = 0;
+                //Pixel (-1,-1)no
+                if(i-1 > -1 && j-1 > -1) {
+                    pixel = ImagenRes.pixeles[i-1][j-1];
+                    rojo += pixel.getRed()* sharpen[0][0];
+                    verd += pixel.getGreen()* sharpen[0][0];
+                    azul += pixel.getBlue()* sharpen[0][0];
+                }
+                //Pixel (0,-1)n
+                if(j-1 > -1) {
+                    pixel = ImagenRes.pixeles[i][j-1];
+                    rojo += pixel.getRed()* sharpen[0][1];
+                    verd += pixel.getGreen()* sharpen[0][1];
+                    azul += pixel.getBlue()* sharpen[0][1];
+                }
+                //Pixel (1,-1)ne
+                if(i+1 < largo && j-1 > -1) {
+                    pixel = ImagenRes.pixeles[i+1][j-1];
+                    rojo += pixel.getRed()* sharpen[0][2];
+                    verd += pixel.getGreen()* sharpen[0][2];
+                    azul += pixel.getBlue()* sharpen[0][2];
+                }
+                //Pixel (-1,0)o
+                if(i-1 > -1) {
+                    pixel = ImagenRes.pixeles[i-1][j];
+                    rojo += pixel.getRed()* sharpen[1][0];
+                    verd += pixel.getGreen()* sharpen[1][0];
+                    azul += pixel.getBlue()* sharpen[1][0];
+                }
+                //Pixel (0,0)c
+                pixel = ImagenRes.pixeles[i][j];
+                rojo += pixel.getRed()* sharpen[1][1];
+                verd += pixel.getGreen()* sharpen[1][1];
+                azul += pixel.getBlue()* sharpen[1][1];
+                //Pixel (1,0)e
+                if(i+1 < largo) {
+                    pixel = ImagenRes.pixeles[i+1][j];
+                    rojo += pixel.getRed()* sharpen[1][2];
+                    verd += pixel.getGreen()* sharpen[1][2];
+                    azul += pixel.getBlue()* sharpen[1][2];
+                }
+                //Pixel (0,1)so
+                if(i-1 > -1 && j+1 < ancho) {
+                    pixel = ImagenRes.pixeles[i-1][j+1];
+                    rojo += pixel.getRed()* sharpen[2][0];
+                    verd += pixel.getGreen()* sharpen[2][0];
+                    azul += pixel.getBlue()* sharpen[2][0];
+                }
+                //Pixel (0,1)s
+                if(j+1 < ancho) {
+                    pixel = ImagenRes.pixeles[i][j+1];
+                    rojo += pixel.getRed()* sharpen[2][1];
+                    verd += pixel.getGreen()* sharpen[2][1];
+                    azul += pixel.getBlue()* sharpen[2][1];
+                }
+                //Pixel (1,1)se
+                if(i+1 < largo && j+1 < ancho) {
+                    pixel = ImagenRes.pixeles[i+1][j+1];
+                    rojo += pixel.getRed()* sharpen[2][2];
+                    verd += pixel.getGreen()* sharpen[2][2];
+                    azul += pixel.getBlue()* sharpen[2][2];
+                }
+            
+                rojo = (rojo > 255)? 255:(rojo < 0)? 0:rojo;
+                verd = (verd > 255)? 255:(verd < 0)? 0:verd;
+                azul = (azul > 255)? 255:(azul < 0)? 0:azul;
+                
+                resultado[i][j] = new Color((int)rojo,(int)verd,(int)azul);
+            }
+        }
+    }
+}
