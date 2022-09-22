@@ -39,7 +39,7 @@ public class VentanaPrincipal extends Ventana{
 	public VentanaPrincipal(GestorVentana gv) {
 		super(gv);
         
-        JPanel principalPanel = new JPanel(new BoxLayout());
+        JPanel principalPanel = new JPanel(new FlowLayout());
         
         JPanel matrixPanel = new JPanel(new FlowLayout());
         
@@ -75,15 +75,11 @@ public class VentanaPrincipal extends Ventana{
         
         // set border for the panel
         matrixPanel.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(), "Multiplicacion de matrices"));
+                BorderFactory.createEtchedBorder(), "Filtros"));
          
         botonEnviar = new JButton("Enviar");
         botonEnviar.addActionListener(this);
-        
-        // add the panel to this frame
-        principalPanel.add(matrixPanel);
-        principalPanel.add(botonEnviar);
-        add.(principalPanel); 
+         
         
 	}
 	
@@ -93,8 +89,9 @@ public class VentanaPrincipal extends Ventana{
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == i1) {
-			ta1.setText("Se pulso un item");
+		if (e.getSource() == sm1_i1) {
+			System.out.println("Se pulso un item");
+            //gv.mostrarVentana(1);
 		}
 		/*if (e.getSource() == botonSalir) {
 			System.exit(0);

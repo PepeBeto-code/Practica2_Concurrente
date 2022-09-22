@@ -1,31 +1,18 @@
-package mvc.modelo;
+package mvc.modelo.filtros;
 
 import java.awt.Color;
-import java.util.concurrent.Semaphore;
 
 import lectorRecursos.ImagenRes;
 
 public class FPromedio extends Filtros {
     
-    private int fila = 0;
-    private Semaphore sem;
-    
-    public FPromedio(String nombre) {
-        super(nombre);
+    public FPromedio() {
+        super();
         extension = "_promedio";
-        sem = new Semaphore(1);
     }
     
     @Override
-    public void concurrente() {
-        int factual = 0;
-        try{
-            sem.acquire();
-            factual = fila;
-            fila++;
-            sem.release();
-            if(factual >= ImagenRes.pixeles.length) return;
-        } catch(InterruptedException e) {}
+    public void concurrente(int factual) {
         for (int j = 0; j < ImagenRes.pixeles[0].length; j++) {
             int rojo = ImagenRes.pixeles[factual][j].getRed();
             int verd = ImagenRes.pixeles[factual][j].getGreen();

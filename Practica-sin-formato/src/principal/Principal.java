@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mvc.modelo.*;
-import lectorRecursos.ImagenRes;
+import mvc.controlador.GestorVentana;
+//import lectorRecursos.ImagenRes;
 
 import java.awt.Color;
 
@@ -16,24 +17,26 @@ public class Principal {
     public static long tiempoInicial;
     public static long tiempoFinal;
     public static long tiempoDelta;
-    public static String imageN = "seyc.png";
+    public static String imageN = "lal";
     
 	/**
 	 * Metodo principal
 	 */
 	public static void main(String[] args) {
-
+        GestorVentana gv = new GestorVentana();
+        gv.mostrarVentana(0);
         
-        iniciarMatriz();
+        /*iniciarMatriz();
         iniciarPromedio();
         iniciarCorrectud2();
         iniciarBlur();
         iniciarMotionBlur();
         iniciarSharpen();
-        iniciarAltoContraste();
+        iniciarCompRGB();
+        iniciarAltoContraste();*/
 	}
 	
-    private static void iniciarPromedio() {
+    /*private static void iniciarPromedio() {
         Filtros f = new FPromedio(imageN);
         System.out.println("Promedio");
         iniciarFiltros(f);
@@ -54,8 +57,7 @@ public class Principal {
     private static void iniciarBlur() {
         System.out.println("Blur");
         Filtros f = new FBlur(imageN);
-        f.secuencial();
-        f.mostrar("copia");
+        iniciarFiltros(f);
     }
     
     private static void iniciarMotionBlur() {
@@ -67,20 +69,25 @@ public class Principal {
     private static void iniciarSharpen() {
         Filtros f = new FSharpen(imageN);
         System.out.println("Shrapen");
-        f.secuencial();
-        f.mostrar("copia");
+        iniciarFiltros(f);
     }
     
-    private static void iniciarFiltros(Filtros f) {
+    private static void iniciarCompRGB() {
+        Filtros f = new FCompRGB(imageN,-1,254,-50);
+        System.out.println("Componente RGB");
+        iniciarFiltros(f);
+    }*/
+    
+    /*private static void iniciarFiltros(Filtros f) {
         tiempoInicial = System.currentTimeMillis();
         f.secuencial();
         tiempoFinal = System.currentTimeMillis();
         tiempoDelta = tiempoFinal - tiempoInicial;
-        f.mostrar("copia");
+        f.mostrar("copia",true);
         System.out.println("Aplicacion filtro secuencial tiempo: " + tiempoDelta +"ms");
         
         tiempoInicial = System.currentTimeMillis();
-        int hilos = 2000;
+        int hilos = 20;
         List<Thread> hilosh = new ArrayList<Thread>();
         try{
             for(int i = 0; i < ImagenRes.pixeles.length-1; i++){
@@ -100,9 +107,9 @@ public class Principal {
         } catch(InterruptedException e) {}
         tiempoFinal = System.currentTimeMillis();
         tiempoDelta = tiempoFinal - tiempoInicial;
-        f.mostrar("copia");
+        f.mostrar("copia",false);
         System.out.println("Aplicacion filtro concurrente tiempo: " + tiempoDelta +"ms");
-    }
+    }*/
     
 	/**
 	 * Metodo que llama a lo que se requiere para comenzar el proyecto

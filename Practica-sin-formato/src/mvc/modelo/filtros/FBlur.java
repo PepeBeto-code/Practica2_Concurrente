@@ -1,7 +1,6 @@
-package mvc.modelo;
+package mvc.modelo.filtros;
 
 import java.awt.Color;
-import java.util.concurrent.Semaphore;
 
 import lectorRecursos.ImagenRes;
 
@@ -11,17 +10,59 @@ public class FBlur extends Filtros {
     private float[][] blur = {{0.0f,0.2f,0.0f},
                               {0.2f,0.2f,0.2f},
                               {0.0f,0.2f,0.0f}};
-    private Semaphore sem;
-    
-    public FBlur(String nombre) {
-        super(nombre);
+                              
+    public FBlur() {
+        super();
         extension = "_blur";
-        sem = new Semaphore(1);
     }
     
     @Override
-    public synchronized void concurrente() {
-        fila++;
+    public void concurrente(int factual) {
+        Color pixel;
+        for(int j = 0; j < ancho; j++) {
+            float rojo = 0f;
+            float verd = 0f;
+            float azul = 0f; 
+            //Pixel (0,-1)n
+            if(j-1 > -1) {
+                pixel = ImagenRes.pixeles[factual][j-1];
+                rojo += pixel.getRed()* blur[0][1];
+                verd += pixel.getGreen()* blur[0][1];
+                azul += pixel.getBlue()* blur[0][1];
+            }
+            //Pixel (-1,0)o
+            if(factual-1 > -1) {
+                pixel = ImagenRes.pixeles[factual-1][j];
+                rojo += pixel.getRed()* blur[1][0];
+                verd += pixel.getGreen()* blur[1][0];
+                azul += pixel.getBlue()* blur[1][0];
+            }
+            //Pixel (0,0)c
+            pixel = ImagenRes.pixeles[factual][j];
+            rojo += pixel.getRed()* blur[1][1];
+            verd += pixel.getGreen()* blur[1][1];
+            azul += pixel.getBlue()* blur[1][1];
+            //Pixel (1,0)e
+            if(factual+1 < largo) {
+                pixel = ImagenRes.pixeles[factual+1][j];
+                rojo += pixel.getRed()* blur[1][2];
+                verd += pixel.getGreen()* blur[1][2];
+                azul += pixel.getBlue()* blur[1][2];
+            }
+            //Pixel (0,1)s
+            if(j+1 < ancho) {
+                pixel = ImagenRes.pixeles[factual][j+1];
+                rojo += pixel.getRed()* blur[2][1];
+                verd += pixel.getGreen()* blur[2][1];
+                azul += pixel.getBlue()* blur[2][1];
+            }
+        
+            rojo = (rojo > 255)? 255:(rojo < 0)? 0:rojo;
+            verd = (verd > 255)? 255:(verd < 0)? 0:verd;
+            azul = (azul > 255)? 255:(azul < 0)? 0:azul;
+            
+            resultado[factual][j] = new Color((int)rojo,(int)verd,(int)azul);
+        }
     }
     
     /**

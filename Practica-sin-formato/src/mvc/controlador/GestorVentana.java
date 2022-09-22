@@ -1,6 +1,10 @@
 package mvc.controlador;
 
-import mvc.vista.*;
+import java.io.File;
+
+import lectorRecursos.ImagenRes;
+import mvc.vista.Ventana;
+import mvc.modelo.Modelo;
 
 /**
  * Clase que coordina las ventanas y la logica del proyecto
@@ -8,24 +12,19 @@ import mvc.vista.*;
 public class GestorVentana {
 	
 	private Ventana[] ventanas;
-	
+    private Modelo modelo;
+    
 	/**
 	 * Constructor de la clase
 	 */
 	public GestorVentana() {
-		iniciarVentanas();
-	}
-	
-	/**
-	 * Inicia las trs ventanas y la logica del proyecto
-	 */
-	private void iniciarVentanas() {
 		ventanas = new Ventana[1];
-		ventanas[0] = new VentanaPrincipal(this);
+		ventanas[0] = new Ventana(this);
+        modelo = new Modelo(this);
 	}
 	
     public void reiniciar() {
-		ventanas[0] = new VentanaPrincipal(this);
+		ventanas[0] = new Ventana(this);
 	}
     
 	/**
@@ -42,5 +41,20 @@ public class GestorVentana {
 		ventanas[i].setVisible(true);
 	}
     
+    public void recibirFiltro(char f) {
+        modelo.iniciarFiltro(f);
+    }
     
+    public void recibirImagen(File fimg) {
+        modelo.cargarImagen(fimg);
+    }
+    
+    public void recibirImagen() {
+        ventanas[0].cargarImagen();
+    }
+    
+    public void aplicarFiltro() {
+        modelo.aplicarFiltro();
+        
+    }
 }

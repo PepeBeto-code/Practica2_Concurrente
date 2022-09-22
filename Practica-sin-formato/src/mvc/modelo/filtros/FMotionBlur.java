@@ -1,13 +1,11 @@
-package mvc.modelo;
+package mvc.modelo.filtros;
 
 import java.awt.Color;
-import java.util.concurrent.Semaphore;
 
 import lectorRecursos.ImagenRes;
 
 public class FMotionBlur extends Filtros {
     
-    private Semaphore sem,sem2;
     private int fila = 0;
     private float blur[][] ={
             {1f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f},
@@ -20,24 +18,12 @@ public class FMotionBlur extends Filtros {
             {0f, 0f, 0f, 0f, 0f, 0f, 0f, 1f, 0f},
             {0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 1f}};
     
-    public FMotionBlur(String nombre) {
-        super(nombre);
+    public FMotionBlur() {
+        super();
         extension = "_motionblur";
-        sem = new Semaphore(1);
-        sem2 = new Semaphore(1);
     }
     
-    @Override
-    public void concurrente() {
-        int factual = 0;
-        //try{
-           // sem.acquire();
-            factual = fila;
-            fila++;
-            //sem.release();
-          //  if(factual >= ImagenRes.pixeles.length) return;
-        //} catch(InterruptedException e) {}
-        
+    public void concurrente(int factual) {
         Color pixel;
         for(int j = 0; j < ImagenRes.pixeles[0].length; j++){
             float rojo = 0f;
@@ -112,11 +98,7 @@ public class FMotionBlur extends Filtros {
             verd = (verd > 255)? 255:(verd < 0)? 0:verd;
             azul = (azul > 255)? 255:(azul < 0)? 0:azul;
             
-            //try{
-            //    sem2.acquire();
-                resultado[factual][j] = new Color((int)rojo,(int)verd,(int)azul);
-            //    sem2.release();
-            //} catch(InterruptedException e) {}
+            resultado[factual][j] = new Color((int)rojo,(int)verd,(int)azul);
         }
     }
     
