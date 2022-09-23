@@ -4,6 +4,9 @@ import java.awt.Color;
 
 import lectorRecursos.ImagenRes;
 
+/**
+ * Clase que implementa una forma de aplicar Blur a una imagen
+ */
 public class FBlur extends Filtros {
     
     private int fila = 0;
@@ -13,9 +16,11 @@ public class FBlur extends Filtros {
                               
     public FBlur() {
         super();
-        extension = "_blur";
     }
     
+    /**
+     * Metodo que aplica blur de forma concurrente
+     */
     @Override
     public void concurrente(int factual) {
         Color pixel;
@@ -25,33 +30,33 @@ public class FBlur extends Filtros {
             float azul = 0f; 
             //Pixel (0,-1)n
             if(j-1 > -1) {
-                pixel = ImagenRes.pixeles[factual][j-1];
+                pixel = entrada[factual][j-1];
                 rojo += pixel.getRed()* blur[0][1];
                 verd += pixel.getGreen()* blur[0][1];
                 azul += pixel.getBlue()* blur[0][1];
             }
             //Pixel (-1,0)o
             if(factual-1 > -1) {
-                pixel = ImagenRes.pixeles[factual-1][j];
+                pixel = entrada[factual-1][j];
                 rojo += pixel.getRed()* blur[1][0];
                 verd += pixel.getGreen()* blur[1][0];
                 azul += pixel.getBlue()* blur[1][0];
             }
             //Pixel (0,0)c
-            pixel = ImagenRes.pixeles[factual][j];
+            pixel = entrada[factual][j];
             rojo += pixel.getRed()* blur[1][1];
             verd += pixel.getGreen()* blur[1][1];
             azul += pixel.getBlue()* blur[1][1];
             //Pixel (1,0)e
             if(factual+1 < largo) {
-                pixel = ImagenRes.pixeles[factual+1][j];
+                pixel = entrada[factual+1][j];
                 rojo += pixel.getRed()* blur[1][2];
                 verd += pixel.getGreen()* blur[1][2];
                 azul += pixel.getBlue()* blur[1][2];
             }
             //Pixel (0,1)s
             if(j+1 < ancho) {
-                pixel = ImagenRes.pixeles[factual][j+1];
+                pixel = entrada[factual][j+1];
                 rojo += pixel.getRed()* blur[2][1];
                 verd += pixel.getGreen()* blur[2][1];
                 azul += pixel.getBlue()* blur[2][1];
@@ -68,6 +73,7 @@ public class FBlur extends Filtros {
     /**
      * Metodo que aplica blur de forma secuencial
      */
+    @Override
     public void secuencial() {
         Color pixel;
         for(int i = 0; i < largo; i++) {
@@ -77,33 +83,33 @@ public class FBlur extends Filtros {
                 float azul = 0f; 
                 //Pixel (0,-1)n
                 if(j-1 > -1) {
-                    pixel = ImagenRes.pixeles[i][j-1];
+                    pixel = entrada[i][j-1];
                     rojo += pixel.getRed()* blur[0][1];
                     verd += pixel.getGreen()* blur[0][1];
                     azul += pixel.getBlue()* blur[0][1];
                 }
                 //Pixel (-1,0)o
                 if(i-1 > -1) {
-                    pixel = ImagenRes.pixeles[i-1][j];
+                    pixel = entrada[i-1][j];
                     rojo += pixel.getRed()* blur[1][0];
                     verd += pixel.getGreen()* blur[1][0];
                     azul += pixel.getBlue()* blur[1][0];
                 }
                 //Pixel (0,0)c
-                pixel = ImagenRes.pixeles[i][j];
+                pixel = entrada[i][j];
                 rojo += pixel.getRed()* blur[1][1];
                 verd += pixel.getGreen()* blur[1][1];
                 azul += pixel.getBlue()* blur[1][1];
                 //Pixel (1,0)e
                 if(i+1 < largo) {
-                    pixel = ImagenRes.pixeles[i+1][j];
+                    pixel = entrada[i+1][j];
                     rojo += pixel.getRed()* blur[1][2];
                     verd += pixel.getGreen()* blur[1][2];
                     azul += pixel.getBlue()* blur[1][2];
                 }
                 //Pixel (0,1)s
                 if(j+1 < ancho) {
-                    pixel = ImagenRes.pixeles[i][j+1];
+                    pixel = entrada[i][j+1];
                     rojo += pixel.getRed()* blur[2][1];
                     verd += pixel.getGreen()* blur[2][1];
                     azul += pixel.getBlue()* blur[2][1];

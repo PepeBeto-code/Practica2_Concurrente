@@ -2,9 +2,11 @@ package mvc.controlador;
 
 import java.io.File;
 
+import java.awt.image.BufferedImage;
+
 import lectorRecursos.ImagenRes;
-import mvc.vista.Ventana;
 import mvc.modelo.Modelo;
+import mvc.vista.Ventana;
 
 /**
  * Clase que coordina las ventanas y la logica del proyecto
@@ -22,39 +24,50 @@ public class GestorVentana {
 		ventanas[0] = new Ventana(this);
         modelo = new Modelo(this);
 	}
-	
-    public void reiniciar() {
-		ventanas[0] = new Ventana(this);
-	}
     
-	/**
-	 * Cambia la ventana dependiendo del entero ingresado.
-	 * @param i 0 para <code>VentanaPrincipal</code>, 1 para 
-	 * <code>VentanaJuego</code>, 2 para <code>VentanaPausa</code>,  cualquier 
-	 * otro numero no termina la ejecucuion pero oculta todas las ventanas
-	 */
-	public void mostrarVentana(int i) {
-		int contador = 0;
-		for(Ventana v: ventanas){
-			if(contador++ != i)v.setVisible(false);
-		}
-		ventanas[i].setVisible(true);
-	}
-    
-    public void recibirFiltro(char f) {
+    /**
+     * Metodo que recibe un tipo de filtro desde la ventana. Comunica el filtro 
+     * al modelo
+     * @param f El enum que representa al filtro a usarse
+     */
+    public void recibirFiltro(TipoFiltro f) {
         modelo.iniciarFiltro(f);
     }
     
+    /**
+     * Metodo que recibe datos adicionales para el filtro de Compoente RGB
+     * @param r Un entero que es cuanto rojo se añade o sustrae
+     * @param g Un entero que es cuanto verde se añade o sustrae
+     * @param b Un entero que es cuanto azul se añade o sustrae
+     */
+    public void recibirAdicional(int r, int g, int b) {
+        modelo.recibirAdicional(r,g,b);
+    }
+    
+    /**
+     * Metodo que recibe un archivo que es una imagen desde la ventana y 
+     * pasarsela al modelo
+     * @param fimg Un objeto File donde esta la imagen
+     */
     public void recibirImagen(File fimg) {
         modelo.cargarImagen(fimg);
     }
     
-    public void recibirImagen() {
-        ventanas[0].cargarImagen();
+    /**
+     * Metodo que recibe una imagen desde el modelo y pasarsela la ventana
+     * @param image Un objeto BufferedImage que sera mostrado en la ventana
+     */
+    public void recibirImagen(BufferedImage image) {
+        ventanas[0].recibirImagen(image);
     }
     
-    public void aplicarFiltro() {
-        modelo.aplicarFiltro();
-        
+    /**
+     * Metodo que avisa al modelo que debe aplicar el filtro con la imagen que
+     * tiene de forma secuencial o concurrente
+     * @param esSecuencial Un booleano que indica de que forma se aplica el 
+     * filtro 
+     */
+    public void aplicarFiltro(boolean esSecuencial) {
+        modelo.aplicarFiltro(esSecuencial);
     }
 }

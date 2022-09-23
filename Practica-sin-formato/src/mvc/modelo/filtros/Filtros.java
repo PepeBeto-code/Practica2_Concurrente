@@ -4,37 +4,53 @@ import java.awt.Color;
 
 import lectorRecursos.ImagenRes;
 
+/**
+ * Clase abstracta que contrine los metodos y atributos que todos los filtros 
+ * deben tener para ser realizados
+ */
 public abstract class Filtros implements Runnable {
     
-    protected Color[][] resultado;
-    protected String extension, nombre;
+    protected Color[][] entrada, resultado;
     protected int ancho, largo;
     
-    public Filtros() {
-        //ImagenRes.cargarImagen(nombre);
-        //this.nombre = nombre;
+    public Filtros() { }
+   
+    /**
+     * Metodo que inicia una matriz de Color que representa una imagen para que 
+     * se aplique el filtro
+     * @param pixeles Un Color[][]
+     */
+    public void iniciarMatriz(Color[][] pixeles) {
+        entrada = pixeles;
+        ancho = entrada[0].length;
+        largo = entrada.length;
+        
+        resultado = new Color[largo][ancho];
     }
     
-    public void iniciarMatriz() {
-        ancho = ImagenRes.pixeles[0].length;
-        largo = ImagenRes.pixeles.length;
-        resultado = new Color[ImagenRes.pixeles.length][ImagenRes.pixeles[0].length];
-    }
     
     @Override
     public void run() {
         concurrente(Integer.parseInt(Thread.currentThread().getName()));
     }
     
+    /**
+     * Metodo a implementar en todos los filtros que sera ejecutado por el 
+     * metodo run
+     * @param factual La fila de la que se encargara el hilo
+     */
     public abstract void concurrente(int factual);
     
     /**
-     * Metodo que aplica correctud2 de forma secuencial
+     * Metodo a implementar en todos los filtros que se ejecuta de manera secuencial
      */
     public abstract void secuencial();
     
-    public void mostrar(String nombre, boolean esSecuencial) {
-        String extra = (esSecuencial)? "secc" : "conc";
-        ImagenRes.guardarImagen(resultado, "" + extra + extension);
+    /**
+     * Metodo que devuelve el resultado de aplicar el filtro
+     * @param Una matriz Color
+     */
+    public Color[][] obtenerResultado() {
+        return resultado;
     }
 }
